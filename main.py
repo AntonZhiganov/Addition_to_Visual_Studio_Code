@@ -15,7 +15,7 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
-            elif event.key == pygame.K_BACKSPACE and pygame.key.get_mods() & pygame.KMOD_LCTRL:
-                print("pressed: LCTRL + BACKSPACE")
+            elif event.key == pygame.K_F2 and pygame.key.get_mods() & pygame.KMOD_SHIFT:
+                print("pressed: Shift + F2")
 
 pygame.quit()
