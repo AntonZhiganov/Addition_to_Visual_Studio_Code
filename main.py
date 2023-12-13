@@ -1,42 +1,51 @@
-import pygame
-import pygame.locals
-
+import pygame,sys
 
 pygame.init()
 
-screen = pygame.display.set_mode((500,150))
+clock = pygame.time.Clock()
+screen = pygame.display.set_mode((900,75))  #Size input screen
 
-running = True
+pygame.display.set_caption('text input')      #Name input screen
 
-user_text = ''
+userText = ' '
 font = pygame.font.SysFont('frenchscript',32) 
-input_rect = pygame.Rect(200,200,140,40)
-active=False
-color_ac=pygame.Color('green')
-color_pc=pygame.Color('red')
-color=color_pc
-active=False
+input_rect = pygame.Rect(10,15,500,40)
+active = False
+colorAktiv = pygame.Color('green')
+colorDontAktiv = pygame.Color('red')
+color = colorDontAktiv
+active = False
 
-while running:
+while True:    
     
-    for event in pygame.event.get():
-        
-        if event.type == pygame.QUIT:
-            
-            running = False
-            
-        elif event.type == pygame.KEYDOWN:
-            
-            if event.key == pygame.K_ESCAPE:
-                
-                running = False
-                
-            elif event.key == pygame.K_BACKSPACE:
-                
-                user_text = user_text[:-1]
-                
-            elif event.key == pygame.K_F2 and pygame.key.get_mods() & pygame.KMOD_SHIFT:
-                active = True
-                print("pressed: Shift + F2")
+   for event in pygame.event.get():
+      if event.type==pygame.QUIT:
+         pygame.quit()
+         sys.exit()
+              
+      if event.type==pygame.MOUSEBUTTONDOWN:
+         if input_rect.collidepoint(event.pos):
+            active = True
 
-pygame.quit()
+      if event.type == pygame.KEYDOWN:
+         if active == True:
+         
+            if event.key == pygame.K_BACKSPACE:
+               userText = userText[:-1]
+            else:
+               userText+=event.unicode
+          
+   screen.fill('black')
+   if active:
+      color=colorAktiv
+   else:
+      color=colorDontAktiv
+      
+   pygame.draw.rect(screen,color,input_rect,2)
+     
+      
+   text_surface = font.render(userText,True,(255,255,255))
+   screen.blit(text_surface,(input_rect.x + 5, input_rect.y +5))
+   input_rect.w=max(100,text_surface.get_width() + 10)
+   pygame.display.flip()
+   clock.tick(60)
