@@ -20,12 +20,20 @@ colorDontAktiv = pygame.Color('red')
 color = colorDontAktiv
 active = False
 
-def create_folders(path):                #Function to create many folders
-    folders = path.split('/')
-    current_path = ''
-    for folder in folders:
-        current_path = os.path.join(current_path, folder)
-        os.makedirs(current_path, exist_ok = True)
+def createFoldresAndFile(path):                #Function to create many folders
+   components = path.split('/')
+   current_path = ''
+    
+   for i, component in enumerate(components[:-1]):           #Creating folders and a file, this part 
+      current_path = os.path.join(current_path, component)   #of the code adds all the names that the 
+      os.makedirs(current_path, exist_ok=True)               #user wrote and understands that these are folders (Excluding the very last one which will be a file)
+    
+   filename = components[-1]                                 #This code selects the last component from the list of path components and adds it to the current path.
+   current_path = os.path.join(current_path, filename)
+   with open(current_path, 'w') as file:
+      file.write("File create")
+           
+   print(f"Folder(s) and file '{filename}' created successfully.")
 
 while True:    
     
@@ -48,8 +56,7 @@ while True:
                print("User input:", userText)
                
                try:
-                  create_folders(userText)               
-                  print(f"Folder(s) and file created successfully.")
+                  createFoldresAndFile(userText)               
                         
                except Exception as e:
                   print(f"An error occurred: {e}")
