@@ -4,22 +4,6 @@ import os
 
 pygame.init()
 
-clock = pygame.time.Clock()        #Controlling the speed of updates
-screen = pygame.display.set_mode((900,75))  #Size input screen
-
-pygame.display.set_caption('text input')      #Name input screen
-
-#User text, input field, background, background color, input field color
-
-userText = ' '
-font = pygame.font.SysFont('Arial',32) 
-input_rect = pygame.Rect(10,15,500,40)
-active = False
-colorAktiv = pygame.Color('green')
-colorDontAktiv = pygame.Color('red')
-color = colorDontAktiv
-active = False
-
 def createFoldresAndFile(path):                #Function to create many folders
    components = path.split('/')
    current_path = ''
@@ -34,47 +18,80 @@ def createFoldresAndFile(path):                #Function to create many folders
       file.write("File create")
            
    print(f"Folder(s) and file '{filename}' created successfully.")
+   
+def chekKeyKombination():                                                       #Create key kombination
+    for event in pygame.event.get():
+       if event.key == pygame.K_BACKSPACE and pygame.key.get_mods() & pygame.KMOD_LCTRL:
+            print("pressed: LCTRL + BACKSPACE")
+       elif event.key == pygame.K_F2 and pygame.key.get_mods() & pygame.KMOD_SHIFT:
+            print("pressed: Shift + F2")
 
-while True:    
-    
-   for event in pygame.event.get():   #Checking for program exit events
-      if event.type==pygame.QUIT:
-         pygame.quit()
-         sys.exit()
-              
-      if event.type==pygame.MOUSEBUTTONDOWN:         #Activate a field by clicking
-         if input_rect.collidepoint(event.pos):
-            active = True
+def main():
 
-      if event.type == pygame.KEYDOWN:       #If button press
-         if active == True:
+   clock = pygame.time.Clock()        #Controlling the speed of updates
+   screen = pygame.display.set_mode((900,75))  #Size input screen
+
+   pygame.display.set_caption('text input')      #Name input screen
+
+   #User text, input field, background, background color, input field color
+
+   userText = ' '
+   font = pygame.font.SysFont('Arial',32) 
+   input_rect = pygame.Rect(10,15,500,40)
+   active = False
+   colorAktiv = pygame.Color('green')
+   colorDontAktiv = pygame.Color('red')
+   color = colorDontAktiv
+   active = False
+   
+
+   
+   while True:    
+      
+      for event in pygame.event.get():   #Checking for program exit events
+         if event.type==pygame.QUIT:
+            pygame.quit()
+            sys.exit()
          
-            if event.key == pygame.K_BACKSPACE:     #If K_BACKSPACE press - erase last character
-               userText = userText[:-1]
-               
-            elif event.key == pygame.K_RETURN:      #If K_RETURN press - create folder/file
-               print("User input:", userText)
-               
-               try:
-                  createFoldresAndFile(userText)               
-                        
-               except Exception as e:
-                  print(f"An error occurred: {e}")
+         if event.type==pygame.MOUSEBUTTONDOWN:         #Activate a field by clicking
+            if input_rect.collidepoint(event.pos):
+               active = True
+
+         if event.type == pygame.KEYDOWN:       #If button press
+            if active == True:
+            
+               if event.key == pygame.K_BACKSPACE:     #If K_BACKSPACE press - erase last character
+                  userText = userText[:-1]
                   
-            else:
-               userText+=event.unicode              #Add char in string
-          
-   screen.fill('black')
-   if active:
-      color=colorAktiv
-   else:
-      color=colorDontAktiv
+               elif event.key == pygame.K_RETURN:      #If K_RETURN press - create folder/file
+                  print("User input:", userText)
+                  
+                  try:
+                     createFoldresAndFile(userText)               
+                           
+                  except Exception as e:
+                     print(f"An error occurred: {e}")
+                     
+               else:
+                  userText+=event.unicode              #Add char in string
+            
+      screen.fill('black')
+      if active:
+         color=colorAktiv
+      else:
+         color=colorDontAktiv
+         
+      pygame.draw.rect(screen,color,input_rect,2)
       
-   pygame.draw.rect(screen,color,input_rect,2)
-     
-      
-   text_surface = font.render(userText,True,(255,255,255))
-   screen.blit(text_surface,(input_rect.x + 5, input_rect.y +5))
-   input_rect.w=max(100,text_surface.get_width() + 10)
-   pygame.display.flip()
-   clock.tick(60)
+         
+      text_surface = font.render(userText,True,(255,255,255))
+      screen.blit(text_surface,(input_rect.x + 5, input_rect.y +5))
+      input_rect.w=max(100,text_surface.get_width() + 10)
+      pygame.display.flip()
+      clock.tick(60)
+
+if __name__ == "__main__":
+   while not chekKeyKombination():
+      pygame.event.get()
+    
+   main()
