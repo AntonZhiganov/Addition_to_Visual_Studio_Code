@@ -307,7 +307,7 @@ pygame much earlier.
 
    A demo showing full joystick support.
 
-   .. versionaddedold:: 2.0.2
+   .. versionadded:: 2.0.2
 
    .. ## pygame.examples.joystick.main ##
 
