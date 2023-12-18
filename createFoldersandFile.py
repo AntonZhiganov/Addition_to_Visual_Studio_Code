@@ -33,7 +33,7 @@ def createFoldresAndFile(path):                #Function to create many folders
    with open(current_path, 'w') as file:
       file.write("File create")
            
-   print(f"Folder(s) and file '{filename}' created successfully.")
+   print(f"Folder(s) and file '{filename}' created successfully.")      #Show "Folder(s) and file ..."
 
 while True:    
     
@@ -77,4 +77,4 @@ while True:
    screen.blit(text_surface,(input_rect.x + 5, input_rect.y +5))
    input_rect.w=max(100,text_surface.get_width() + 10)
    pygame.display.flip()
-   clock.tick(60)
+   clock.tick(60)           #60FPS
