@@ -699,7 +699,7 @@ stdopts = {'-bg': SepArg('*background'),
 # the resource object.
 
 # Example:  Inserting "foo.bar*gazonk: yep" into an otherwise empty
-# resource database would give the following structure:
+# resource database would give the folliwing structure:
 
 # { 'foo': ( { 'bar': ( { },
 #                       { 'gazonk': ( { },

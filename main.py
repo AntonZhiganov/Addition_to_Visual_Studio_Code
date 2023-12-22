@@ -1,9 +1,10 @@
 import pygame,sys
 import sys
 import os
+from ewmh import EWMH        #To get active windows
 
 pygame.init()
-
+ 
 clock = pygame.time.Clock()        #Controlling the speed of updates
 screen = pygame.display.set_mode((900,75))  #Size input screen
 
@@ -19,6 +20,16 @@ colorAktiv = pygame.Color('green')
 colorDontAktiv = pygame.Color('red')
 color = colorDontAktiv
 active = False
+
+def activeVS():                          #If VS active, it executes the code further
+   ewmh = EWMH()
+   windows = ewmh.getClientList()        #gets a list of windows
+   window_titles = [ewmh.getWmName(window).decode('utf-8') if ewmh.getWmName(window) else "" for window in windows]
+   for title in window_titles:            #If Visual Studio is in the list of windows, it continues execution
+        if "Visual Studio" in title:  
+            return True
+   return False                           #If Visual Studio is not in the list of windows, 
+                                          #it displays an error and closes the program
 
 def createFoldresAndFile(path):                #Function to create many folders
    components = path.split('/')
@@ -55,11 +66,13 @@ while True:
             elif event.key == pygame.K_RETURN:      #If K_RETURN press - create folder/file
                print("User input:", userText)
                
-               try:
-                  createFoldresAndFile(userText)               
-                        
-               except Exception as e:
-                  print(f"An error occurred: {e}")
+               if activeVS():                        #If VS active, it creates a folder
+                     createFoldresAndFile(userText)
+               else:
+                     print("Visual Studio is not open. Exiting program.")
+                     pygame.time.delay(5000)
+                     pygame.quit()
+                     sys.exit()
                   
             else:
                userText+=event.unicode              #Add char in string
