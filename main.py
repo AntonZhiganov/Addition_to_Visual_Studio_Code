@@ -25,6 +25,9 @@ def activeVS():                          #If VS active, it executes the code fur
    ewmh = EWMH()
    windows = ewmh.getClientList()        #gets a list of windows
    window_titles = [ewmh.getWmName(window).decode('utf-8') if ewmh.getWmName(window) else "" for window in windows]
+   
+   print(window_titles)
+   
    for title in window_titles:            #If Visual Studio is in the list of windows, it continues execution
         if "Visual Studio" in title:  
             return True
