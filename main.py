@@ -2,6 +2,7 @@ import pygame,sys
 import sys
 import os
 from ewmh import EWMH        #To get active windows
+import psutil     #Import to access system information
 
 pygame.init()
  
@@ -21,33 +22,40 @@ colorDontAktiv = pygame.Color('red')
 color = colorDontAktiv
 active = False
 
-def activeVS():                          #If VS active, it executes the code further
-   ewmh = EWMH()
-   windows = ewmh.getClientList()        #gets a list of windows
-   window_titles = [ewmh.getWmName(window).decode('utf-8') if ewmh.getWmName(window) else "" for window in windows]
-   
-   print(window_titles)
-   
-   for title in window_titles:            #If Visual Studio is in the list of windows, it continues execution
-        if "Visual Studio" in title:  
-            return True
-   return False                           #If Visual Studio is not in the list of windows, 
-                                          #it displays an error and closes the program
+def activeVS():
+    for process in psutil.process_iter(['pid', 'name', 'cmdline']):   #obtaining information about running processes in the system (identifier, name, command line)
+        if "code" in process.info['name'].lower() and any("vscode" in arg.lower() for arg in process.info['cmdline']): #Checks whether there is (Code and vs code) in the process name
+            projectPath = process.info['cmdline'][-1].strip()   #Gets the path to the active project from the last command line argument of the process
+            print(f"Active project in Visual Studio Code: {projectPath}") #Active project
+            return projectPath
 
-def createFoldresAndFile(path):                #Function to create many folders
-   components = path.split('/')
-   current_path = ''
-    
-   for i, component in enumerate(components[:-1]):           #Creating folders and a file, this part 
-      current_path = os.path.join(current_path, component)   #of the code adds all the names that the 
-      os.makedirs(current_path, exist_ok=True)               #user wrote and understands that these are folders (Excluding the very last one which will be a file)
-    
-   filename = components[-1]                                 #This code selects the last component from the list of path components and adds it to the current path.
-   current_path = os.path.join(current_path, filename)
-   with open(current_path, 'w') as file:
-      file.write("File create")
-           
-   print(f"Folder(s) and file '{filename}' created successfully.")      #Show "Folder(s) and file ..."
+    return None
+
+
+
+
+def createFoldresAndFile(path):
+    vs_project_path = activeVS()         #Getting the path of the active project in Visual Studio Code
+    if vs_project_path:
+        targetDir = os.path.join(path) #Create the full path to the target directory
+
+        components = targetDir.split('/')  #Separating folders and files
+        current_path = ''
+
+         # Iterate through the components, creating folders but the last one is a file
+        for i, component in enumerate(components[:-1]):
+            current_path = os.path.join(current_path, component)
+            os.makedirs(current_path, exist_ok=True)
+
+        filename = components[-1] # Get the filename from the last component
+        
+        current_path = os.path.join(current_path, filename) # Create the full path to the file
+        with open(current_path, 'w') as file:
+            file.write("File create")
+
+        print(f"Folder(s) and file '{filename}' created successfully in the your folder")
+    else:
+        print("Visual Studio Code is not open or there is no active project.")
 
 while True:    
     
