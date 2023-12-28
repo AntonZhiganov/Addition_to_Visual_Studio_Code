@@ -1,7 +1,6 @@
 import pygame,sys
 import sys
 import os
-from ewmh import EWMH        #To get active windows
 import psutil     #Import to access system information
 
 pygame.init()
