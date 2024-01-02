@@ -1,4 +1,4 @@
-import pygame,sys
+import pygame
 import sys
 import os
 import psutil     #Import to access system information
@@ -30,13 +30,10 @@ def activeVS():
 
     return None
 
-
-
-
-def createFoldresAndFile(path):
+def createFoldresAndFile(user_text):
     vs_project_path = activeVS()         #Getting the path of the active project in Visual Studio Code
     if vs_project_path:
-        targetDir = os.path.join(path) #Create the full path to the target directory
+        targetDir = os.path.join(user_text) #Create the full path to the target directory
 
         components = targetDir.split('/')  #Separating folders and files
         current_path = ''
