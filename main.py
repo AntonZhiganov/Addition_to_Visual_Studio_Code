@@ -1,6 +1,6 @@
-import pygame
-import sys
-import os
+import pygame     #To create an input window
+import sys        #To interact with the Python interpreter and operating system
+import os         #provides functions for interacting with the operating system, such as working with the file system.
 import psutil     #Import to access system information
 
 pygame.init()
